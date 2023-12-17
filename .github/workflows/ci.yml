@@ -33,12 +33,17 @@ jobs:
         uses: hashicorp/setup-terraform@v1
         with:
           terraform_version: '1.0.0'  # Set the Terraform version
+      - name: Enter terraform folder
+        run: cd terraform
   
       - name: Terraform Init
         run: terraform init
   
       - name: Terraform Apply
         run: terraform apply -auto-approve
+
+      - name: Get out terraform folder
+        run: cd ..
   
       - name: Install Serverless Framework with pnpm
         run: pnpm add -g serverless
