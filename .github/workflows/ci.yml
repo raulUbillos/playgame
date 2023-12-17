@@ -52,11 +52,5 @@ jobs:
         run: |
           cd terraform
           terraform apply -auto-approve
-  
-      - name: Install Serverless Framework with pnpm
-        run: |
-          pnpm setup
-          pnpm add -g serverless
-  
       - name: Deploy with Serverless Framework
-        run: serverless deploy
+        run: npx serverless deploy
