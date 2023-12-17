@@ -1,47 +1,43 @@
-# name: CI
+name: Production
+env:
+    AWS_SECRET_ACCESS_KEY: ${{secrets.production.AWS_SECRET_ACCESS_KEY}}
+    AWS_ACCESS_KEY: ${{secrets.production.AWS_ACCESS_KEY}}
+    AWS_S3_REGION: ${{secrets.production.AWS_S3_REGION}}
+    SCRAPINGWEB: https://datos.gob.ar/dataset/generos-base-datos-linea-144
+    INGEST_BUCKET: listas-144
+    MODE: GET-LAST
+on:
+    push: 
+        branches: 
+            - main
+jobs:
+    deploy:
+        runs-on: ubuntu-latest  # Specifies the runner environment
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v2  # Checks out your repository under $GITHUB_WORKSPACE
 
-# on:
-#   push:
-#     branches: ["main"]
-#   pull_request:
-#     types: [opened, synchronize]
-
-# jobs:
-#   build:
-#     name: Build and Test
-#     timeout-minutes: 15
-#     runs-on: ${{ matrix.os }}
-#     # To use Remote Caching, uncomment the next lines and follow the steps below.
-#     # env:
-#     #  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
-#     #  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
-#     env:
-      
-#     strategy:
-#       matrix:
-#         os: [ubuntu-latest, macos-latest]
-
-#     steps:
-#       - name: Check out code
-#         uses: actions/checkout@v2
-#         with:
-#           fetch-depth: 2
-
-#       - uses: pnpm/action-setup@v2.0.1
-#         with:
-#           version: 8.0.0
-
-#       - name: Setup Node.js environment
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: 18
-#           cache: "pnpm"
-
-#       - name: Install dependencies
-#         run: pnpm install
-
-#       - name: Build
-#         run: pnpm build
-
-#       - name: Test
-#         run: pnpm test
+            - name: Set up Node.js
+              uses: actions/setup-node@v2
+              with:
+                node-version: '14'  # Set the Node.js version
+        
+            - name: Install Dependencies
+              run: npm install  # Install Node.js dependencies
+        
+            - name: Install Terraform
+              uses: hashicorp/setup-terraform@v1
+              with:
+                terraform_version: '1.0.0'  # Set the Terraform version
+        
+            - name: Terraform Init
+              run: terraform init
+        
+            - name: Terraform Apply
+              run: terraform apply -auto-approve
+        
+            - name: Install Serverless Framework
+              run: npm install -g serverless
+        
+            - name: Deploy with Serverless Framework
+              run: serverless deploy
