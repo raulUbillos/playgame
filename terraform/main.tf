@@ -7,9 +7,7 @@ terraform {
     }
   }
 }
-provider "aws" {
 
-}
 
 
 module "bucket" {
