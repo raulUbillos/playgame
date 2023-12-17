@@ -9,17 +9,10 @@ export const functions: AWS["functions"] = {
     timeout:900,
     events: [
       {
-        http: {
-          method: "get",
-          path: "ingestion",
-          cors: true,
-        },
-      },
-      {
         schedule:{
           rate:["rate(1 minute)"],
           description:'Ingest CSV',
-          name:'Ingestion process',
+          name:'Ingestionprocess',
           enabled: true
         }
       }
