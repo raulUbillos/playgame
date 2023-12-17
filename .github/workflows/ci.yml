@@ -12,45 +12,53 @@ on:
         branches: 
             - main
 jobs:
-  deploy:
-    runs-on: ubuntu-latest  # Specifies the runner environment
-    environment: production  # Specify the production environment
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [16.x]  # Your project specifies Node >=16.0.0
 
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@v2  # Checks out your repository under $GITHUB_WORKSPACE
-  
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '*'  # Set the Node.js version
-  
-      - name: Install pnpm
-        run: npm install -g pnpm
-  
-      - name: Install Dependencies with pnpm
-        run: pnpm install  # Install Node.js dependencies using pnpm
-  
-      - name: Install Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-          terraform_version: '*'  # Set the Terraform version
+    - uses: actions/checkout@v2
 
-      - name: Set up AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_S3_REGION }}
-          
-      - name: Terraform Init
-        run: |
-          cd terraform
-          terraform init
-  
-      - name: Terraform Apply
-        run: |
-          cd terraform
-          terraform apply -auto-approve
-      - name: Deploy with Serverless Framework
-        run: npx serverless deploy
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'pnpm'  # Enables caching for pnpm
+
+    - name: Install pnpm
+      run: npm install -g pnpm
+
+    - name: Install Dependencies with pnpm
+      run: pnpm install
+
+    - name: Build with Turbo
+      run: pnpm run build
+
+    - name: Package with Turbo
+      run: pnpm run package
+
+    - name: Install Terraform
+      uses: hashicorp/setup-terraform@v1
+
+    - name: Initialize Terraform
+      run: |
+        cd terraform
+        terraform init
+
+    - name: Apply Terraform
+      run: |
+        cd terraform
+        terraform apply -auto-approve
+
+    - name: Deploy to Staging with Turbo
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: pnpm run deploy:staging
+
+    - name: Deploy to Production with Turbo
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      run: pnpm run deploy:production
+      environment:
+        name: production
+        url: ${{ steps.deploy.outputs.webapp-url }}  # Adjust this based on your deployment output
