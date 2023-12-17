@@ -26,9 +26,7 @@ jobs:
           node-version: '*'  # Set the Node.js version
   
       - name: Install pnpm
-        run: |
-          npm install -g pnpm
-          pnpm setup
+        run: npm install -g pnpm
   
       - name: Install Dependencies with pnpm
         run: pnpm install  # Install Node.js dependencies using pnpm
@@ -56,7 +54,9 @@ jobs:
           terraform apply -auto-approve
   
       - name: Install Serverless Framework with pnpm
-        run: pnpm add -g serverless
+        run: |
+          pnpm setup
+          pnpm add -g serverless
   
       - name: Deploy with Serverless Framework
         run: serverless deploy
