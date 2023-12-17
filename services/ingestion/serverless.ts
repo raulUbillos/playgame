@@ -16,7 +16,7 @@ const serverlessConfiguration: AWS = {
       AWS_NODEJS_CONNECTION_REUSE_ENABLED: "1",
       NODE_OPTIONS: "--enable-source-maps --stack-trace-limit=1000",
       SCRAPINGWEB: '${env:SCRAPINGWEB}' || '',
-      AWS_S3_REGION: '${env:AWS_DEFAULT_REGION}' || '',
+      AWS_S3_REGION: '${env:AWS_S3_REGION}' || '',
       INGEST_BUCKET: '${env:INGEST_BUCKET}' || '',
       MODE: '${env:MODE}' || '',
       AWS_SECRET_ACCESS_KEY:'${env:AWS_SECRET_ACCESS_KEY}' || '',
