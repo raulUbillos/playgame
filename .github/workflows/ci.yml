@@ -2,7 +2,9 @@ name: Production
 env:
     AWS_SECRET_ACCESS_KEY: ${{secrets.AWS_SECRET_ACCESS_KEY}}
     AWS_ACCESS_KEY: ${{secrets.AWS_ACCESS_KEY}}
+    AWS_ACCESS_KEY_ID: ${{secrets.AWS_ACCESS_KEY}}
     AWS_S3_REGION: ${{secrets.AWS_S3_REGION}}
+    AWS_DEFAULT_REGION: ${{secrets.AWS_S3_REGION}}
     SCRAPINGWEB: https://datos.gob.ar/dataset/generos-base-datos-linea-144
     INGEST_BUCKET: listas-144
     MODE: GET-LAST
@@ -46,11 +48,19 @@ jobs:
       uses: hashicorp/setup-terraform@v1
 
     - name: Initialize Terraform
+      env:  # Ensure AWS credentials are available to Terraform
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_S3_REGION }}
       run: |
         cd terraform
         terraform init
 
     - name: Apply Terraform
+      env:  # Ensure AWS credentials are available to Terraform
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: ${{ secrets.AWS_S3_REGION }}
       run: |
         cd terraform
         terraform apply -auto-approve
