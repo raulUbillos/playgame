@@ -6,6 +6,7 @@ env:
     SCRAPINGWEB: https://datos.gob.ar/dataset/generos-base-datos-linea-144
     INGEST_BUCKET: listas-144
     MODE: GET-LAST
+    SHELL: 'bash'
 on:
     push: 
         branches: 
