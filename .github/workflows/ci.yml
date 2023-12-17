@@ -11,33 +11,37 @@ on:
         branches: 
             - main
 jobs:
-    deploy:
-        runs-on: ubuntu-latest  # Specifies the runner environment
-        steps:
-            - name: Checkout Code
-              uses: actions/checkout@v2  # Checks out your repository under $GITHUB_WORKSPACE
+  deploy:
+    runs-on: ubuntu-latest  # Specifies the runner environment
 
-            - name: Set up Node.js
-              uses: actions/setup-node@v2
-              with:
-                node-version: '14'  # Set the Node.js version
-        
-            - name: Install Dependencies
-              run: npm install  # Install Node.js dependencies
-        
-            - name: Install Terraform
-              uses: hashicorp/setup-terraform@v1
-              with:
-                terraform_version: '1.0.0'  # Set the Terraform version
-        
-            - name: Terraform Init
-              run: terraform init
-        
-            - name: Terraform Apply
-              run: terraform apply -auto-approve
-        
-            - name: Install Serverless Framework
-              run: npm install -g serverless
-        
-            - name: Deploy with Serverless Framework
-              run: serverless deploy
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2  # Checks out your repository under $GITHUB_WORKSPACE
+  
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'  # Set the Node.js version
+  
+      - name: Install pnpm
+        run: npm install -g pnpm  # Install pnpm globally
+  
+      - name: Install Dependencies with pnpm
+        run: pnpm install  # Install Node.js dependencies using pnpm
+  
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: '1.0.0'  # Set the Terraform version
+  
+      - name: Terraform Init
+        run: terraform init
+  
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+  
+      - name: Install Serverless Framework with pnpm
+        run: pnpm add -g serverless
+  
+      - name: Deploy with Serverless Framework
+        run: serverless deploy
