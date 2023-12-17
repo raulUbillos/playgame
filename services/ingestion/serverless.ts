@@ -4,7 +4,7 @@ import { functions } from "@functions/index";
 
 const serverlessConfiguration: AWS = {
   service: "api1",
-  frameworkVersion: "3.29.0",
+  frameworkVersion: "^3.29.0",
   plugins: ["serverless-esbuild", "serverless-offline"],
   useDotenv: true,
   provider: {
