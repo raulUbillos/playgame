@@ -10,7 +10,7 @@ export const functions: AWS["functions"] = {
     events: [
       {
         schedule:{
-          rate:["rate(1 minute)"],
+          rate:["rate(1 day)"],
           description:'Ingest CSV',
           name:'Ingestionprocess',
           enabled: true
