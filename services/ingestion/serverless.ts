@@ -19,8 +19,6 @@ const serverlessConfiguration: AWS = {
       AWS_S3_REGION: '${env:AWS_S3_REGION}' || '',
       INGEST_BUCKET: '${env:INGEST_BUCKET}' || '',
       MODE: '${env:MODE}' || '',
-      AWS_SECRET_ACCESS_KEY:'${env:AWS_SECRET_ACCESS_KEY}' || '',
-      AWS_ACCESS_KEY:'${env:AWS_ACCESS_KEY}' || ''
     },
     deploymentMethod: 'direct',
     architecture: 'arm64'
