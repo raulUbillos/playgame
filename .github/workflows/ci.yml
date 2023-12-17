@@ -34,7 +34,7 @@ jobs:
         with:
           terraform_version: '1.0.0'  # Set the Terraform version
       - name: Enter terraform folder
-        run: cd terraform
+        run: cd terraform && ls
   
       - name: Terraform Init
         run: terraform init
