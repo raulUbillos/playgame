@@ -1,5 +1,5 @@
 {
-  "name": "api1",
+  "name": "ingestion",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -19,6 +19,8 @@
     "tsconfig": "workspace:*"
   },
   "dependencies": {
-    "helpers": "workspace:*"
+    "aws-sdk": "^2.1515.0",
+    "axios": "^1.6.2",
+    "cheerio": "1.0.0-rc.12"
   }
 }
