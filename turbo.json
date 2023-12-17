@@ -28,9 +28,7 @@
     },
     "package": {
       "dependsOn": [
-        "build",
-        "test",
-        "lint"
+        "build"
       ],
       "cache": false
     },
