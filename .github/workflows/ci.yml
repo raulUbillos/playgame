@@ -38,6 +38,9 @@ jobs:
     - name: Install Dependencies with pnpm
       run: pnpm install
 
+    - name: Run lint
+      run: pnpm run lint
+
     - name: Build with Turbo
       run: pnpm run build
 
@@ -65,9 +68,9 @@ jobs:
         cd terraform
         terraform apply -auto-approve
 
-    # - name: Deploy to Staging with Turbo
-    #   if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    #   run: pnpm run deploy:staging
+    - name: Deploy to Staging with Turbo
+      if: github.ref == 'refs/heads/staging' && github.event_name == 'push'
+      run: pnpm run deploy:staging
 
     - name: Deploy to Production with Turbo
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'

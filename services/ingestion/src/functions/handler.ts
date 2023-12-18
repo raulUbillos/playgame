@@ -1,11 +1,11 @@
 import { IngestionService } from "./services/IngestionService";
 
 const ingest = async (
-)=> {
+):Promise<void> => {
 
-  let scrapper = new IngestionService();
+  const scrapper = new IngestionService();
   
-   await scrapper.process();
+  await scrapper.process();
 
 };
 

@@ -2,8 +2,8 @@ import AWS from 'aws-sdk';
 import {LambdaLog} from 'lambda-log';
 
 export class S3Provider{
-    private s3:AWS.S3
-    private bucket:string
+    private s3:AWS.S3;
+    private bucket:string;
     private logger: LambdaLog = new LambdaLog();
 
     constructor({bucket=''}){
@@ -14,10 +14,10 @@ export class S3Provider{
             },
             region: process.env.AWS_S3_REGION
         });
-        this.bucket = bucket
+        this.bucket = bucket;
     }
 
-    async upload({file='',route=''}){
+    async upload({file='',route=''}):Promise<AWS.S3.PutObjectOutput>{
         this.logger.info('Uploading file to s3');
         const result = await this.s3.putObject({
             Bucket:this.bucket,
@@ -27,7 +27,7 @@ export class S3Provider{
         }).promise();
 
         if(result.$response.error){
-            const error = new Error(`Error uploading the file: ${result.$response.error.code}`)
+            const error = new Error(`Error uploading the file: ${result.$response.error.code}`);
             this.logger.info('Error uploading file to s3', {error});
             throw error;
         }
